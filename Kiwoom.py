@@ -82,6 +82,9 @@ class Kiwoom(QAxWidget):
             pass
 
     def _opt10081(self, rqname, trcode):
+
+
+    def _opt10081(self, rqname, trcode):
         data_cnt = self._get_repeat_cnt(trcode, rqname)
 
         for i in range(data_cnt):

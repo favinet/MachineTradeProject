@@ -6,6 +6,7 @@ from pandas import DataFrame
 import datetime
 import webreader
 import numpy as np
+from naver import DataReader
 
 MARKET_KOSPI    = 0
 MARKET_KOSDAQ   = 10
@@ -19,15 +20,31 @@ class PyMon:
     def get_code_list(self):
         self.kospi_codes = self.kiwoom.get_code_list_by_market(MARKET_KOSPI)
         self.kosdaq_codes = self.kiwoom.get_code_list_by_market(MARKET_KOSDAQ)
+        print(self.kospi_codes)
+        print(self.kosdaq_codes)
 
-    def get_ohlcv(self, code, start):
+    def get_ohlcv(self, code, end):
+        """
         self.kiwoom.ohlcv = {"date": [], "open": [], "high": [], "low": [], "close": [], "volume": []}
         self.kiwoom.set_input_value("종목코드", code)
         self.kiwoom.set_input_value("기준일자", start)
         self.kiwoom.set_input_value("수정주가구분", 1)
         self.kiwoom.comm_rq_data("opt10081_req", "opt10081", 0, "0101")
+        """
+        edate = datetime.datetime.strptime(end, "%Y%m%d")
+        #edate = datetime.datetime.today()
+        sdate = edate + datetime.timedelta(days=-60)
+
+        start = sdate.strftime("%Y%m%d")
+        #end = edate.strftime("%Y%m%d")
+
+        stock = DataReader.getStockData(code, start, end)
+
         time.sleep(1)
-        df = DataFrame(self.kiwoom.ohlcv, columns=["open", "high", "low", "close", "volume"], index=self.kiwoom.ohlcv['date'])
+        print("일간데이터 : " + code)
+        print(stock)
+        #df = DataFrame(stock, columns=["open", "high", "low", "close", "volume"], index=self.kiwoom.ohlcv['date'])
+        df = DataFrame(stock, columns=["open", "high", "low", "close", "volume"], index=stock['date'])
         return df
 
     def check_speedy_rising_volume(self, code):
@@ -50,6 +67,7 @@ class PyMon:
                 break
 
         avg_vol20 = sum_vol20 / 20
+        print(code ," today vol : ", today_vol , ", avg_vol : " , avg_vol20 * 10)
         if today_vol > avg_vol20 * 10 :
             return True
 
@@ -104,6 +122,8 @@ class PyMon:
         num = len(self.kosdaq_codes)
         for i, code in enumerate(self.kosdaq_codes):
             print(i, '/', num)
+            if i == 5:
+                break
             if self.check_speedy_rising_volume(code):
                 buy_list.append(code)
 
@@ -140,8 +160,8 @@ class PyMon:
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     pymon = PyMon()
-    pymon.run_dividend()
-    #pymon.run()
+    #pymon.run_dividend()
+    pymon.run()
     #print(pymon.calculate_estimated_dividend_to_treasury("058470"))
     #print(pymon.get_min_max_devidend_to_treasury("058470"))
     #print(pymon.buy_check_by_dividend_algorithm("058470"))
