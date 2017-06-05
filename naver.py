@@ -84,7 +84,10 @@ class DataReader:
     def getStockData(code, start, end):
 
         startNum = int(start)
-        endNum = int(end)
+        if end == None:
+            endNum = 19960625
+        else:
+            endNum = int(end)
 
         if endNum > startNum:
             chk = endNum
@@ -147,7 +150,7 @@ class DataReader:
 
 
 if __name__ == "__main__":
-    df = DataReader.getStockData("035900", "20170531", "19960625")
+    df = DataReader.getStockData("251270", "20170605", "20170604")
     print(df)
 
 
