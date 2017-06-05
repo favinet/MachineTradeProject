@@ -103,6 +103,7 @@ class DataReader:
             page = page + 1
             #print(str(page))
             url = "http://finance.naver.com/item/sise_day.nhn?code=" + code + "&page=" + str(page)
+            print(url)
             html = urlopen(url)
             source = BeautifulSoup(html.read(), "html.parser")
             srlists = source.find_all("tr")

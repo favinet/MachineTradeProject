@@ -8,7 +8,7 @@ conn = pymysql.connect(host='218.38.28.147', user='root', password='rnjscjfghrhr
 curs = conn.cursor()
 
 # SQL문 실행
-sql = "select * from sise"
+sql = "select * from sise limit 1"
 curs.execute(sql)
 
 # 데이타 Fetch

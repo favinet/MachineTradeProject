@@ -128,8 +128,8 @@ class PyCrawler:
         for i, code in enumerate(self.kosdaq_codes):
             print(i, '/', num)
 
-            if(i > 5):
-                break
+            if(i <= 7):
+                continue
 
             startend = self.get_search_range(code)
 
@@ -143,7 +143,7 @@ class PyCrawler:
 
     def runtest(self):
 
-        code = "900090"
+        code = "900290"
 
         startend = self.get_search_range(code)
 
