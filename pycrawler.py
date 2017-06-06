@@ -128,7 +128,7 @@ class PyCrawler:
         for i, code in enumerate(self.kosdaq_codes):
             print(i, '/', num)
 
-            if(i <= 7):
+            if(i <= 30):
                 continue
 
             startend = self.get_search_range(code)
