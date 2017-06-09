@@ -18,6 +18,7 @@ import time
 import datetime
 from naver import DataReader
 from datamanager import Mysql
+from threading import Thread
 
 MARKET_KOSPI    = 0
 MARKET_KOSDAQ   = 10
@@ -128,7 +129,7 @@ class PyCrawler:
         for i, code in enumerate(self.kosdaq_codes):
             print(i, '/', num)
 
-            if(i <= 30):
+            if(i <= 276):
                 continue
 
             startend = self.get_search_range(code)
@@ -161,8 +162,22 @@ class PyCrawler:
 
         self.set_jongmokdata_sql(code, df1, MARKET_KOSDAQ)
 
+
+    def runkiwoom(self):
+
+        num = len(self.kosdaq_codes)
+        for i, code in enumerate(self.kosdaq_codes):
+            print(i, '/', num, '/', code)
+
+            if not self.kiwoom.connected :
+                break
+
+            df = self.get_jongmok_kiwoom(code)
+
+            time.sleep(5)
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     crawler = PyCrawler()
-    crawler.run()
+    crawler.runkiwoom()
 

@@ -1,3 +1,4 @@
+import os
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QAxContainer import *
@@ -5,6 +6,10 @@ from PyQt5.QtCore import *
 import time
 import pandas as pd
 import sqlite3
+import threading
+import datetime
+from threading import Thread
+
 TR_REQ_TIME_INTERVAL = 0.2
 
 class Kiwoom(QAxWidget):
@@ -29,11 +34,29 @@ class Kiwoom(QAxWidget):
 
     def _event_connect(self, err_code):
         if err_code == 0:
+            self.connected = True
             print("connected")
         else:
+            self.connected = False
+            #self.funcTimer(0)
             print("disconnected")
+            self.tr_event_loop.exit()
+            #os._exit()
 
         self.login_event_loop.exit()
+
+    def funcTimer(self, count):
+
+        print("Timer Expired")
+        print(str(count) + " " + str(datetime.datetime.now()))
+        count += 1
+        # threading.Timer(delay, 함수, args=[매개변수,]) - delay초 후에 함수실행
+        timer = threading.Timer(30, self.funcTimer, args=[count])
+
+        if count < 10 and not self.connected:
+            timer.start()
+            #self.tr_event_loop.exit()
+            #self.comm_connect()
 
     def get_code_list_by_market(self, market):
         code_list = self.dynamicCall("GetCodeListByMarket(QString)", market)
