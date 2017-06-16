@@ -9,6 +9,8 @@ import sqlite3
 import threading
 import datetime
 from threading import Thread
+from pywinauto import application
+from pywinauto import timings
 
 TR_REQ_TIME_INTERVAL = 0.2
 
@@ -35,15 +37,28 @@ class Kiwoom(QAxWidget):
     def _event_connect(self, err_code):
         if err_code == 0:
             self.connected = True
+            self.login_event_loop.exit()
             print("connected")
         else:
             self.connected = False
-            #self.funcTimer(0)
-            print("disconnected")
             self.tr_event_loop.exit()
+            #self.clear()
+            timer = threading.Timer(10, self.funcWindow)
+            timer.start()
+            print("disconnected")
             #os._exit()
-
         self.login_event_loop.exit()
+        print("_event_connect")
+
+    def funcWindow(self):
+        #d_handle = application.findwindows.find_windows(title=u'KHOpenAPI')[0]
+        d_handle = application.findwindows.find_windows(title=u'\uc548\ub155\ud558\uc138\uc694. '
+                                                              u'\ud0a4\uc6c0\uc99d\uad8c \uc785\ub2c8\ub2e4.')[0]
+        dlg_app = application.Application().connect(handle=d_handle)
+        dlg = dlg_app.window(handle=d_handle)
+        dlg.SetFocus()
+        ctrl = dlg['확인']
+        ctrl.Click()
 
     def funcTimer(self, count):
 

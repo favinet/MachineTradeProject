@@ -50,6 +50,14 @@ class PyCrawler:
             edate = None
         return (sdate, edate)
 
+    def get_search_code(self):
+        rows = self.my.select("select * from jongmok order by idx desc limit 1;", ())
+        if(rows):
+            code = rows[0]["code"]
+        else:
+            code = None
+        return code
+
     def set_sisedata_sql(self, code, df):
 
         for i, date in enumerate(df["date"]):
@@ -116,21 +124,34 @@ class PyCrawler:
 
 
     def get_jongmok_kiwoom(self, code):
-
         self.kiwoom.reset_opt10001_output()
         self.kiwoom.set_input_value("종목코드", code)
         self.kiwoom.comm_rq_data("opt10001_req", "opt10001", 0, "2000")
-
         return self.kiwoom.opt10001_output
 
     def run(self):
 
+        lastcode = self.get_search_code()
+        if lastcode == None :
+            start = 0
+        else:
+            start = self.kosdaq_codes.index(lastcode)
         num = len(self.kosdaq_codes)
-        for i, code in enumerate(self.kosdaq_codes):
+        bound = range(start, num)
+        print(lastcode)
+        print(bound)
+
+        #for i, code in enumerate(self.kosdaq_codes):
+        for i in bound:
             print(i, '/', num)
 
-            if(i <= 276):
-                continue
+            if not self.kiwoom.connected :
+                break
+
+            #if(i <= 276):
+            #    continue
+
+            code = self.kosdaq_codes[i]
 
             startend = self.get_search_range(code)
 
@@ -168,16 +189,13 @@ class PyCrawler:
         num = len(self.kosdaq_codes)
         for i, code in enumerate(self.kosdaq_codes):
             print(i, '/', num, '/', code)
-
             if not self.kiwoom.connected :
                 break
-
             df = self.get_jongmok_kiwoom(code)
-
             time.sleep(5)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     crawler = PyCrawler()
-    crawler.runkiwoom()
+    crawler.run()
 
