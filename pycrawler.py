@@ -135,13 +135,17 @@ class PyCrawler:
         if lastcode == None :
             start = 0
         else:
-            start = self.kosdaq_codes.index(lastcode)
-        num = len(self.kosdaq_codes)
+            try:
+                start = self.kospi_codes.index(lastcode)
+            except ValueError:
+                start = 0
+
+        num = len(self.kospi_codes)
         bound = range(start, num)
         print(lastcode)
         print(bound)
 
-        #for i, code in enumerate(self.kosdaq_codes):
+        #for i, code in enumerate(self.kospi_codes):
         for i in bound:
             print(i, '/', num)
 
@@ -151,7 +155,7 @@ class PyCrawler:
             #if(i <= 276):
             #    continue
 
-            code = self.kosdaq_codes[i]
+            code = self.kospi_codes[i]
 
             startend = self.get_search_range(code)
 

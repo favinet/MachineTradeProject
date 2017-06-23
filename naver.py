@@ -115,9 +115,10 @@ class DataReader:
             if (page == 1):
                 maxPage = source.find_all("table", align="center")
                 mp = maxPage[0].find_all("td", class_="pgRR")
-                href = mp[0].a.get("href")
-                mpNum = int(href[len(prefix) + href.find(prefix):])
-                #print("mpNum : ", mpNum)
+                if (len(mp) > 0):
+                    href = mp[0].a.get("href")
+                    mpNum = int(href[len(prefix) + href.find(prefix):])
+                    #print("mpNum : ", mpNum)
 
             for i in range(1, len(srlists) - 1):
                 if (srlists[i].span != isCheckNone):

@@ -52,13 +52,16 @@ class Kiwoom(QAxWidget):
 
     def funcWindow(self):
         #d_handle = application.findwindows.find_windows(title=u'KHOpenAPI')[0]
-        d_handle = application.findwindows.find_windows(title=u'\uc548\ub155\ud558\uc138\uc694. '
-                                                              u'\ud0a4\uc6c0\uc99d\uad8c \uc785\ub2c8\ub2e4.')[0]
-        dlg_app = application.Application().connect(handle=d_handle)
-        dlg = dlg_app.window(handle=d_handle)
-        dlg.SetFocus()
-        ctrl = dlg['확인']
-        ctrl.Click()
+        try:
+            d_handle = application.findwindows.find_windows(title=u'\uc548\ub155\ud558\uc138\uc694. '
+                                                                  u'\ud0a4\uc6c0\uc99d\uad8c \uc785\ub2c8\ub2e4.')[0]
+            dlg_app = application.Application().connect(handle=d_handle)
+            dlg = dlg_app.window(handle=d_handle)
+            dlg.SetFocus()
+            ctrl = dlg['확인']
+            ctrl.Click()
+        except Exception as e:
+            print(e)
 
     def funcTimer(self, count):
 
