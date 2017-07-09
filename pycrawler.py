@@ -131,18 +131,21 @@ class PyCrawler:
 
     def run(self):
 
-        lastcode = self.get_search_code()
+        """lastcode = self.get_search_code()
         if lastcode == None :
             start = 0
         else:
             try:
                 start = self.kospi_codes.index(lastcode)
             except ValueError:
-                start = 0
-
-        num = len(self.kospi_codes)
+                start = 0"""
+        stocks = []
+        stocks.extend(self.kospi_codes)
+        stocks.extend(self.kosdaq_codes)
+        start = 0
+        num = len(stocks)
         bound = range(start, num)
-        print(lastcode)
+        #print(lastcode)
         print(bound)
 
         #for i, code in enumerate(self.kospi_codes):
@@ -155,7 +158,8 @@ class PyCrawler:
             #if(i <= 276):
             #    continue
 
-            code = self.kospi_codes[i]
+            #code = self.kospi_codes[i]
+            code = stocks.pop()
 
             startend = self.get_search_range(code)
 

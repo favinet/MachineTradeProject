@@ -130,7 +130,9 @@ class DataReader:
                     volume = srlists[i].find_all("td", class_="num")[5].text
 
                     ndate = date.replace(".", "")
-                    ndateNum = int(ndate)
+                    ndateNum = 0
+                    if (len(ndate) > 0):
+                        ndateNum = int(ndate)
 
                     if endNum <= ndateNum:
                         if startNum >= ndateNum:
