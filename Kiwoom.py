@@ -34,6 +34,13 @@ class Kiwoom(QAxWidget):
         self.login_event_loop = QEventLoop()
         self.login_event_loop.exec_()
 
+    def comm_terminate(self):
+        self.tr_event_loop.exit()
+        self.close()
+        self.connected = False
+        print("end")
+
+
     def _event_connect(self, err_code):
         if err_code == 0:
             self.connected = True

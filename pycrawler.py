@@ -9,13 +9,13 @@
 7. kiwoom jongmok data
 8. insert jongmok data
 
-
 """
 import sys
 from PyQt5.QtWidgets import *
 import Kiwoom
 import time
 import datetime
+import random
 from naver import DataReader
 from datamanager import Mysql
 from threading import Thread
@@ -140,14 +140,15 @@ class PyCrawler:
             except ValueError:
                 start = 0"""
         stocks = []
-        stocks.extend(self.kospi_codes)
         stocks.extend(self.kosdaq_codes)
+        stocks.extend(self.kospi_codes)
         start = 0
         num = len(stocks)
         bound = range(start, num)
         #print(lastcode)
         print(bound)
-
+        chksum = 0
+        rchk = 0
         #for i, code in enumerate(self.kospi_codes):
         for i in bound:
             print(i, '/', num)
@@ -170,6 +171,13 @@ class PyCrawler:
             df1 = self.get_jongmok_kiwoom(code)
 
             self.set_jongmokdata_sql(code, df1, MARKET_KOSDAQ)
+
+            if (chksum == 800) :
+                rchk = random.randrange(1, 10) * 10
+                chksum = 0
+                time.sleep(601)
+
+            chksum += 1
 
     def runtest(self):
 
