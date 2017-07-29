@@ -5,6 +5,7 @@ import time
 import Kiwoom
 from PyQt5.QtCore import QObject, pyqtSignal, QTimer
 import threading
+from pywinauto import application
 
 class StockApplication(QApplication):
 
@@ -27,12 +28,42 @@ class StockApplication(QApplication):
 
     def changedFocusSlot(self, old, now):
         print("focus changed")
-        self.kiwoom.comm_terminate()
-        self.kiwoom = None
+        StockApplication.kiwoom.comm_terminate()
+        StockApplication.kiwoom = None
 
     def funcWindow(self):
-        #d_handle = application.findwindows.find_windows(title=u'KHOpenAPI')[0]
+        #if StockApplication.kiwoom is None:
+        #    return None
         try:
+            """app = application.Application().connect()
+            dlg = app.top_window()
+            if dlg is not None:
+                StockApplication.kiwoom.comm_terminate()
+                StockApplication.kiwoom = None"""
+            expression = u'.*\uc870\ud68c\ud69f\uc218.*'
+            windows = application.findwindows.find_windows(title_re=expression)
+            print("windows length : " + str(len(windows)))
+            if len(windows) > 0:
+                StockApplication.kiwoom.comm_terminate()
+                StockApplication.kiwoom = None
+                d_handle = windows[0]
+                dlg_app = application.Application().connect(handle=d_handle)
+                dlg = dlg_app.window(handle=d_handle)
+                dlg.SetFocus()
+                ctrl = dlg['확인']
+                ctrl.Click()
+
+            """print("window check")
+            print(self.modalWindow())
+            dialog = self.modalWindow()
+            if dialog is not None:
+                StockApplication.kiwoom.comm_terminate()
+                StockApplication.kiwoom = None"""
+
+        except Exception as e:
+            print(e)
+        #d_handle = application.findwindows.find_windows(title=u'KHOpenAPI')[0]
+        """try:
             print("window check")
             print(self.activeModalWidget())
             dialog = self.activeModalWidget()
@@ -41,7 +72,7 @@ class StockApplication(QApplication):
                 self.kiwoom = None
 
         except Exception as e:
-            print(e)
+            print(e)"""
 
 if __name__ == "__main__":
     app = StockApplication(sys.argv)
