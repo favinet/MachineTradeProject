@@ -44,14 +44,14 @@ class StockApplication(QApplication):
             windows = application.findwindows.find_windows(title_re=expression)
             print("windows length : " + str(len(windows)))
             if len(windows) > 0:
-                StockApplication.kiwoom.comm_terminate()
-                StockApplication.kiwoom = None
+                #StockApplication.kiwoom.comm_terminate()
+                #StockApplication.kiwoom = None
                 d_handle = windows[0]
                 dlg_app = application.Application().connect(handle=d_handle)
                 dlg = dlg_app.window(handle=d_handle)
                 dlg.SetFocus()
-                ctrl = dlg['확인']
-                ctrl.Click()
+                #ctrl = dlg['확인']
+                #ctrl.Click()
 
             """print("window check")
             print(self.modalWindow())
